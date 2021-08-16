@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateTable extends Migration
 {
-    
+
     public function __construct()
     {
         $this->table =
@@ -51,7 +51,7 @@ class CreateTable extends Migration
             $table->string('username')->nullable();
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('is_verified');
+            $table->boolean('is_verified')->default(0);
             $table->timestamps();
         });
     }

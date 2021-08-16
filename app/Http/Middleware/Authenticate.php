@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class Authenticate
 {
@@ -33,12 +34,34 @@ class Authenticate
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next, $guard = ['users'])
     {
-        if ($this->auth->guard($guard)->guest()) {
-            return response('Unauthorized.', 401);
-        }
+        // if ($this->auth->guard($guard)->guest()) {
+        //     return response('Unauthorized.', 401);
+        // }
 
-        return $next($request);
+        foreach ($guard as $g) {
+            if ($this->auth->guard($g)->check()) {
+                return $next($request);
+            }
+        }
+        try {
+            JWTAuth::parseToken()->authenticate();
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $th) {
+            return $this->sendResponse('Token Expired', 401);
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $th) {
+            return $this->sendResponse('Token Invalid', 401);
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $th) {
+            return $this->sendResponse('Token not provided', 401);
+        }
+        return $this->sendResponse('Unauthorized.', 401);
+    }
+    public function sendResponse($message = null, $code)
+    {
+        $status = $code == 200 ? true : false;
+        return response()->json([
+            'status' => $status,
+            'message' => $message
+        ], $code);
     }
 }
