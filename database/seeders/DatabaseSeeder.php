@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call('UsersTableSeeder');
+        $this->adminSeed();
+    }
+    public function adminSeed()
+    {
+        Admin::insert([
+            'name' => 'Richie Zakaria',
+            'username' => 'richie',
+            'password' => app('hash')->make('richie')
+        ]);
     }
 }

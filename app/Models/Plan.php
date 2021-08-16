@@ -13,4 +13,8 @@ class Plan extends Model
     {
         return $this->hasMany('App\Models\UserPlan');
     }
+    public function getFreeId()
+    {
+        return $this->where('name', 'Free')->first()->id;
+    }
 }

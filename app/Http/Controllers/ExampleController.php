@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use App\Exceptions\InvalidOrderException;
+use Illuminate\Support\Facades\Validator;
+
 class ExampleController extends Controller
 {
     /**
@@ -14,19 +18,20 @@ class ExampleController extends Controller
         //
     }
 
-    public function create()
+    public function index()
     {
     }
-    public function read()
+
+    public function store(Request $request)
     {
     }
-    public function update()
+    public function show($id)
     {
     }
-    public function show()
+    public function update(Request $request)
     {
     }
-    public function delete()
+    public function destroy($id)
     {
     }
 }

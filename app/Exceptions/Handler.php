@@ -50,6 +50,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         $rendered = parent::render($request, $exception);
+        // return $rendered;
         $code = $rendered->getStatusCode();
         $status = $code == 200 ? true : false;
         $message = $code == 404 || $code == 405 ? 'Endpoint not found' : $exception->getMessage();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Exceptions\InvalidOrderException;
+use App\Models\Plan;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -17,7 +18,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        //
+        $this->plan = new Plan();
     }
 
     public function register(Request $req)
@@ -34,6 +35,7 @@ class AuthController extends Controller
             $user->email = $req->email;
             $user->password = app('hash')->make($req->password);
             $user->save();
+            $user->plan()->create(['plan_id' => $this->plan->getFreeId()]);
             return $this->sendResponse('Success Register', $user, 200);
         } catch (InvalidOrderException $th) {
             return $this->sendResponse('Error Register', $th, 200);

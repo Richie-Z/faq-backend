@@ -17,4 +17,12 @@ class ExampleMiddleware
     {
         return $next($request);
     }
+    public function sendResponse($message = null, $code)
+    {
+        $status = $code == 200 ? true : false;
+        return response()->json([
+            'status' => $status,
+            'message' => $message
+        ], $code);
+    }
 }

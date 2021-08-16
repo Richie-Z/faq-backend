@@ -20,8 +20,21 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix' => 'auth'], function () use ($router) {
     $router->post('login', 'AuthController@login');
     $router->post('register', 'AuthController@register');
-    $router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->group(['middleware' => ['auth', 'role:users']], function () use ($router) {
         $router->delete('logout', 'AuthController@logout');
         $router->get('detail', 'AuthController@detail');
+    });
+});
+
+$router->group(['prefix' => 'admin'], function () use ($router) {
+    $router->group(['prefix' => 'auth'], function () use ($router) {
+        $router->post('login', 'Admin\AuthController@login');
+        $router->group(['middleware' => ['auth', 'role:admin']], function () use ($router) {
+            $router->delete('logout', 'Admin\AuthController@logout');
+            $router->get('detail', 'Admin\AuthController@detail');
+        });
+    });
+    $router->group(['prefix' => 'plan', 'middleware' => ['auth', 'role:admin']], function () use ($router) {
+        $router->post('', 'Admin\PlanController@store');
     });
 });
