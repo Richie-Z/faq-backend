@@ -39,8 +39,9 @@ $router->group(['prefix' => 'admin', 'namespace' => 'Admin'], function () use ($
     });
     $router->group(['prefix' => 'plan', 'middleware' => ['auth', 'role:admin']], function () use ($router) {
         $router->post('', 'PlanController@store');
-        $router->put('', 'PlanController@update');
+        $router->put('{id:[0-9]+}', 'PlanController@update');
         $router->get('', 'PlanController@index');
-        $router->delete('', 'PlanController@destroy');
+        $router->get('{id:[0-9]+}', 'PlanController@show');
+        $router->delete('{id:[0-9]+}', 'PlanController@destroy');
     });
 });

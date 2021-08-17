@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Exceptions\InvalidOrderException;
+use App\Http\Resources\PlanResource;
 use App\Models\Plan;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,6 +22,7 @@ class PlanController extends Controller
 
     public function index()
     {
+        return $this->sendResponse(null, Plan::all(), 200);
     }
     public function store(Request $request)
     {
@@ -30,7 +32,7 @@ class PlanController extends Controller
         ]);
         if ($validate->fails()) return $this->sendResponse('Validation Error', $validate->messages(), 422);
         try {
-            $plan = Plan::insert($request->all());
+            $plan = Plan::create($request->all());
             return $this->sendResponse('Success add Plan', $plan, 200);
         } catch (InvalidOrderException $th) {
             return $this->sendResponse("error", $th, 500);
@@ -38,6 +40,8 @@ class PlanController extends Controller
     }
     public function show($id)
     {
+        $plan = Plan::findOrFail($id);
+        return $this->sendResponse(null, new PlanResource($plan), 200);
     }
     public function update(Request $request, int $id)
     {
@@ -45,7 +49,10 @@ class PlanController extends Controller
         $plan->update($request->all());
         return $this->sendResponse('Success update Plan', $plan, 200);
     }
-    public function destroy()
+    public function destroy($id)
     {
+        $plan = Plan::findOrFail($id);
+        $plan->delete();
+        return $this->sendResponse("Success Delete", null, 200);
     }
 }
