@@ -39,8 +39,11 @@ class PlanController extends Controller
     public function show($id)
     {
     }
-    public function update(Request $request)
+    public function update(Request $request, int $id)
     {
+        $plan = Plan::findOrFail($id);
+        $plan->update($request->all());
+        return $this->sendResponse('Success update Plan', $plan, 200);
     }
     public function destroy()
     {

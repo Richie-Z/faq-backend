@@ -29,15 +29,18 @@ $router->group(['prefix' => 'account', 'middleware' => ['auth', 'role:users']], 
     $router->post('', 'AccountController@store');
     $router->put('', 'AccountController@update');
 });
-$router->group(['prefix' => 'admin'], function () use ($router) {
+$router->group(['prefix' => 'admin', 'namespace' => 'Admin'], function () use ($router) {
     $router->group(['prefix' => 'auth'], function () use ($router) {
-        $router->post('login', 'Admin\AuthController@login');
+        $router->post('login', 'AuthController@login');
         $router->group(['middleware' => ['auth', 'role:admin']], function () use ($router) {
-            $router->delete('logout', 'Admin\AuthController@logout');
-            $router->get('detail', 'Admin\AuthController@detail');
+            $router->delete('logout', 'AuthController@logout');
+            $router->get('detail', 'AuthController@detail');
         });
     });
     $router->group(['prefix' => 'plan', 'middleware' => ['auth', 'role:admin']], function () use ($router) {
-        $router->post('', 'Admin\PlanController@store');
+        $router->post('', 'PlanController@store');
+        $router->put('', 'PlanController@update');
+        $router->get('', 'PlanController@index');
+        $router->delete('', 'PlanController@destroy');
     });
 });

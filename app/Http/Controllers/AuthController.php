@@ -40,7 +40,7 @@ class AuthController extends Controller
             $user->password = app('hash')->make($req->password);
             $user->save();
             $user->plan()->create([
-                'plan_id' => $this->plan->getFreeId(),
+                'plan_id' => $this->plan->freeId(),
                 'expires_at' => Carbon::now()->addYear(1),
             ]);
             DB::commit();
