@@ -48,7 +48,7 @@ class CreateTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->nullable();
+            $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password');
             $table->boolean('is_verified')->default(0);
@@ -80,6 +80,7 @@ class CreateTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('plan_id');
+            $table->date('expires_at');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('plan_id')->references('id')->on('plans')->onDelete('cascade');
@@ -90,7 +91,7 @@ class CreateTable extends Migration
         Schema::create('user_detail', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

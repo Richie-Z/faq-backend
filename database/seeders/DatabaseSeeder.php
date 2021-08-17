@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Admin;
+use App\Models\Plan;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,6 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->adminSeed();
+        $this->planSeed();
     }
     public function adminSeed()
     {
@@ -22,6 +24,13 @@ class DatabaseSeeder extends Seeder
             'name' => 'Richie Zakaria',
             'username' => 'richie',
             'password' => app('hash')->make('richie')
+        ]);
+    }
+    public function planSeed()
+    {
+        Plan::insert([
+            'name' => 'Free',
+            'price' => 0
         ]);
     }
 }

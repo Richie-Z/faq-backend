@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class UserPlan extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'plan_id'];
+    protected $table = "user_plan";
+    protected $fillable = ['user_id', 'plan_id', 'expires_at'];
+    // protected $with = ['plan'];
     public function user()
     {
         return $this->belongsTo('App\Models\User');
