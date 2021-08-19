@@ -39,13 +39,19 @@ $router->group(['prefix' => 'group', 'middleware' => ['auth', 'role:users']], fu
         $router->get('', 'GroupController@getTrashed');
         $router->put('{id:[0-9]+}', 'GroupController@restoreTrashed');
     });
-});
-$router->group(['prefix' => 'group/{code}/faq', 'middleware' => ['auth', 'role:users']], function () use ($router) {
-    $router->post('', 'GroupController@store');
-    $router->put('{id:[0-9]+}', 'GroupController@update');
-    $router->get('', 'GroupController@index');
-    $router->get('{id:[0-9]+}', 'GroupController@show');
-    $router->delete('{id:[0-9]+}[/{method}]', 'GroupController@destroy');
+    $router->group(['prefix' => '{code}/faq'], function () use ($router) {
+        $router->post('', 'FaQController@store');
+        $router->put('{id:[0-9]+}', 'FaQController@update');
+        $router->get('', 'FaQController@index');
+        $router->get('{id:[0-9]+}', 'FaQController@show');
+        $router->delete('{id:[0-9]+}', 'FaQController@destroy');
+        $router->group(['prefix' => '{id:[0-9]+}/answer_question'], function () use ($router) {
+            $router->post('', 'FaQController@storeAQ');
+            $router->get('{aq:[0-9]+}', 'FaQController@showAQ');
+            $router->put('{aq:[0-9]+}', 'FaQController@updateAQ');
+            $router->delete('{aq:[0-9]+}', 'FaQController@destroyAQ');
+        });
+    });
 });
 $router->group(['prefix' => 'admin', 'namespace' => 'Admin'], function () use ($router) {
     $router->group(['prefix' => 'auth'], function () use ($router) {

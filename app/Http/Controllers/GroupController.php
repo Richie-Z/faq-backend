@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Exceptions\InvalidOrderException;
+use App\Http\Resources\GroupResource;
 use App\Models\Group;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -56,6 +57,8 @@ class GroupController extends Controller
     }
     public function show($id)
     {
+        $group = Group::findOrFail($id);
+        return $this->sendResponse(null, new GroupResource($group->load('faq')), 200);
     }
     public function update(Request $request, $id)
     {
