@@ -74,4 +74,8 @@ class AuthController extends Controller
     {
         return $this->sendResponse(null, new UserResource(auth()->user()->load(['detail', 'group'])), 200);
     }
+    public function superDetail()
+    {
+        return $this->sendResponse(null, new UserResource(auth()->user()->load(['detail', 'group', 'group.faq', 'group.faq.answerQuestion'])), 200);
+    }
 }

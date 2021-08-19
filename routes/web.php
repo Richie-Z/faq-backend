@@ -23,6 +23,7 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
     $router->group(['middleware' => ['auth', 'role:users']], function () use ($router) {
         $router->delete('logout', 'AuthController@logout');
         $router->get('detail', 'AuthController@detail');
+        $router->get('super_detail', 'AuthController@superDetail');
     });
 });
 $router->group(['prefix' => 'account', 'middleware' => ['auth', 'role:users']], function () use ($router) {
