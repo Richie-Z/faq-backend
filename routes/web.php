@@ -29,6 +29,8 @@ $router->group(['prefix' => 'account', 'middleware' => ['auth', 'role:users']], 
     $router->post('', 'AccountController@store');
     $router->put('', 'AccountController@update');
 });
+$router->group(['prefix' => 'group', 'middleware' => ['auth', 'role:users']], function () use ($router) {
+});
 $router->group(['prefix' => 'admin', 'namespace' => 'Admin'], function () use ($router) {
     $router->group(['prefix' => 'auth'], function () use ($router) {
         $router->post('login', 'AuthController@login');

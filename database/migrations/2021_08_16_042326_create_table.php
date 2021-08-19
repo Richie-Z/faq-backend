@@ -53,6 +53,7 @@ class CreateTable extends Migration
             $table->string('password');
             $table->boolean('is_verified')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
     public function admin(): void
@@ -79,11 +80,11 @@ class CreateTable extends Migration
         Schema::create('user_plan', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('plan_id');
+            $table->unsignedBigInteger('plan_id')->nullable();
             $table->date('expires_at');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('plan_id')->references('id')->on('plans')->onDelete('cascade');
+            $table->foreign('plan_id')->references('id')->on('plans')->onDelete('set null');
         });
     }
     public function userDetail(): void
@@ -105,6 +106,7 @@ class CreateTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->softDeletes();
         });
     }
     public function faq(): void
@@ -115,6 +117,7 @@ class CreateTable extends Migration
             $table->unsignedBigInteger('group_id');
             $table->timestamps();
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
+            $table->softDeletes();
         });
     }
     public function answerQuestion(): void

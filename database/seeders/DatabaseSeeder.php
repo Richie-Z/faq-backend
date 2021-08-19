@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
     }
     public function adminSeed()
     {
-        Admin::insert([
+        Admin::create([
             'name' => 'Richie Zakaria',
             'username' => 'richie',
             'password' => app('hash')->make('richie')
@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
     }
     public function planSeed()
     {
-        Plan::insert([
+        Plan::create([
             'name' => 'Free',
             'price' => 0
         ]);
