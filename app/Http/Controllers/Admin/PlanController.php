@@ -52,6 +52,7 @@ class PlanController extends Controller
     public function destroy($id)
     {
         $plan = Plan::findOrFail($id);
+        if ($id == 1) return $this->sendResponse("Error,'$plan->name' plan cannot be deleted", null, 422);
         $plan->delete();
         return $this->sendResponse("Success Delete", null, 200);
     }

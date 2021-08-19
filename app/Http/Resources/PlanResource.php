@@ -10,7 +10,7 @@ class PlanResource extends JsonResource
     private function getUser($carry, $item)
     {
         $user = User::findOrFail($item['user_id'])->toArray();
-        $carry[] = array_filter($user, fn ($key) => in_array($key, ['username']), ARRAY_FILTER_USE_KEY);
+        $carry[] = array_filter($user, fn ($key) => in_array($key, ['id', 'username']), ARRAY_FILTER_USE_KEY);
         return $carry;
     }
     public function toArray($request)

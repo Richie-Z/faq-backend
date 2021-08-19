@@ -15,6 +15,6 @@ class Plan extends Model
     }
     public function scopeFreeId()
     {
-        return $this->where('name', 'like', '%free%')->first()->id;
+        return $this->where('name', 'like', '%free%')->first()->id ?? 1;
     }
 }
