@@ -30,6 +30,15 @@ $router->group(['prefix' => 'account', 'middleware' => ['auth', 'role:users']], 
     $router->put('', 'AccountController@update');
 });
 $router->group(['prefix' => 'group', 'middleware' => ['auth', 'role:users']], function () use ($router) {
+    $router->post('', 'GroupController@store');
+    $router->put('{id:[0-9]+}', 'GroupController@update');
+    $router->get('', 'GroupController@index');
+    $router->get('{id:[0-9]+}', 'GroupController@show');
+    $router->delete('{id:[0-9]+}[/{method}]', 'GroupController@destroy');
+    $router->group(['prefix' => 'trash'], function () use ($router) {
+        $router->get('', 'GroupController@getTrashed');
+        $router->put('{id:[0-9]+}', 'GroupController@restoreTrashed');
+    });
 });
 $router->group(['prefix' => 'admin', 'namespace' => 'Admin'], function () use ($router) {
     $router->group(['prefix' => 'auth'], function () use ($router) {

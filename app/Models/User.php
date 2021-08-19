@@ -37,4 +37,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->hasOne('App\Models\UserDetail');
     }
+    public function group()
+    {
+        return $this->hasMany('App\Models\Group');
+    }
 }
