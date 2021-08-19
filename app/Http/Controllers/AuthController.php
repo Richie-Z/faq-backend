@@ -72,6 +72,6 @@ class AuthController extends Controller
     }
     public function detail()
     {
-        return $this->sendResponse(null, new UserResource(auth()->user()->load('detail')), 200);
+        return $this->sendResponse(null, new UserResource(auth()->user()->load(['detail', 'group'])), 200);
     }
 }

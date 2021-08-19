@@ -21,7 +21,8 @@ class UserResource extends JsonResource
             'plan' => $plan,
             'detail' => $this->whenLoaded('detail', function () {
                 return ['name' => $this->detail->name];
-            })
+            }),
+            'groups' => GroupResource::collection($this->whenLoaded('group'))
         ];
     }
 }
