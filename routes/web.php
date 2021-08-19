@@ -40,6 +40,13 @@ $router->group(['prefix' => 'group', 'middleware' => ['auth', 'role:users']], fu
         $router->put('{id:[0-9]+}', 'GroupController@restoreTrashed');
     });
 });
+$router->group(['prefix' => 'group/{code}/faq', 'middleware' => ['auth', 'role:users']], function () use ($router) {
+    $router->post('', 'GroupController@store');
+    $router->put('{id:[0-9]+}', 'GroupController@update');
+    $router->get('', 'GroupController@index');
+    $router->get('{id:[0-9]+}', 'GroupController@show');
+    $router->delete('{id:[0-9]+}[/{method}]', 'GroupController@destroy');
+});
 $router->group(['prefix' => 'admin', 'namespace' => 'Admin'], function () use ($router) {
     $router->group(['prefix' => 'auth'], function () use ($router) {
         $router->post('login', 'AuthController@login');
