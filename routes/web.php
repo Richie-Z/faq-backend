@@ -23,7 +23,6 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
     $router->group(['middleware' => ['auth', 'role:users']], function () use ($router) {
         $router->delete('logout', 'AuthController@logout');
         $router->get('detail', 'AuthController@detail');
-        $router->get('super_detail', 'AuthController@superDetail');
     });
 });
 $router->group(['prefix' => 'account', 'middleware' => ['auth', 'role:users']], function () use ($router) {
@@ -68,5 +67,13 @@ $router->group(['prefix' => 'admin', 'namespace' => 'Admin'], function () use ($
         $router->get('', 'PlanController@index');
         $router->get('{id:[0-9]+}', 'PlanController@show');
         $router->delete('{id:[0-9]+}', 'PlanController@destroy');
+    });
+    $router->group(['prefix' => 'user', 'middleware' => ['auth', 'role:admin']], function () use ($router) {
+        $router->get('', 'UserController@index');
+        $router->get('{id:[0-9]+}', ['as' => 'super_detail', 'uses' => 'UserController@show']);
+        $router->delete('{id:[0-9]+}', 'UserController@ban');
+        $router->put('{id:[0-9]+}', 'UserController@unban');
+        $router->get('/banned', 'UserController@banned');
+        $router->delete('{id:[0-9]+}/delete', 'UserController@destroy');
     });
 });

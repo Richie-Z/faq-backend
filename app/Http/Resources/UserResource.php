@@ -14,10 +14,17 @@ class UserResource extends JsonResource
             'price' => $planInfo->price,
         ];
         $planInfo->price == 0 ?:   $plan['expires_at'] = $this->plan->expired_at;
-        return [
+        $userInfo = [
             'id' => $this->id,
             'username' => $this->username,
             'email' => $this->email,
+        ];
+        if (auth('admin')->check()) {
+            $userInfo['created_at'] = $this->created_at;
+            $userInfo['updated_at'] = $this->updated_at;
+            $userInfo['deleted_at'] = $this->deleted_at;
+        }
+        return $userInfo + [
             'plan' => $plan,
             'detail' => $this->whenLoaded('detail', function () {
                 return ['name' => $this->detail->name];
