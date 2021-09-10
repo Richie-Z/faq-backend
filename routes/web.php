@@ -39,6 +39,10 @@ $router->group(['prefix' => 'group', 'middleware' => ['auth', 'role:users']], fu
         $router->get('', 'GroupController@getTrashed');
         $router->put('{id:[0-9]+}', 'GroupController@restoreTrashed');
     });
+    $router->group(['prefix' => 'owner/{id:[0-9]+}', 'middleware' => 'owner_group'], function () use ($router) {
+        $router->post('add_member', 'GroupMemberController@addMember');
+        $router->delete('remove_member/{id_mem:[0-9]+}', 'GroupMemberController@removeMember');
+    });
     $router->group(['prefix' => '{code}/faq'], function () use ($router) {
         $router->post('', 'FaQController@store');
         $router->put('{id:[0-9]+}', 'FaQController@update');

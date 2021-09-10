@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterUsersTable extends Migration
+class AlterGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class AlterUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('groups', function (Blueprint $table) {
+            $table->string('members')->nullable();
         });
     }
 
@@ -24,7 +25,7 @@ class AlterUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('groups', function (Blueprint $table) {
             //
         });
     }

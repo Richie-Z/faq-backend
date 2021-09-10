@@ -15,7 +15,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 {
     use Authenticatable, Authorizable, HasFactory, SoftDeletes;
     protected $fillable = [
-        'username', 'email', 'password', 'is_verified'
+        'username', 'email', 'password', 'is_verified', 'groups_member'
     ];
     protected $hidden = [
         'password',

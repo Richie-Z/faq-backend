@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Group extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['name', 'code', 'user_id'];
+    protected $fillable = ['name', 'code', 'user_id', 'members'];
     public function user()
     {
         return $this->belongsTo('App\Models\User');

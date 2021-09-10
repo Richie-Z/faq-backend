@@ -79,6 +79,7 @@ $app->configure('app');
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
     'role' => App\Http\Middleware\Role::class,
+    'owner_group' => App\Http\Middleware\OwnerGroup::class,
 ]);
 
 /*
