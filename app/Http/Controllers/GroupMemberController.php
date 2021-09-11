@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Group;
 use App\Models\User;
 use App\Exceptions\InvalidOrderException;
+use App\Http\Resources\GroupResource;
 use Illuminate\Support\Facades\DB;
 
 class GroupMemberController extends Controller
@@ -24,7 +25,6 @@ class GroupMemberController extends Controller
     private function addIntoJSON($s, $item)
     {
         $data = json_decode($s);
-        // dd(is_countable($data));
         if ($data) {
             if (!$this->checkValueJSON($data, $item)) {
                 $data[] = $item;
@@ -45,8 +45,10 @@ class GroupMemberController extends Controller
         $this->no_item = true;
         return $data;
     }
-    public function showMember($id)
+    public function showMember()
     {
+        $group = Group::findOrFail(request('id'));
+        return $this->sendResponse(null, new GroupResource($group), 200);
     }
     public function addMember(Request $request, $id)
     {

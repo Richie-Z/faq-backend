@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Group;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -24,12 +25,15 @@ class UserResource extends JsonResource
             $userInfo['updated_at'] = $this->updated_at;
             $userInfo['deleted_at'] = $this->deleted_at;
         }
+        $gm = json_decode($this->group_members) ?? [];
+        $groupMembers = Group::whereIn('id', $gm)->get();
         return $userInfo + [
             'plan' => $plan,
             'detail' => $this->whenLoaded('detail', function () {
                 return ['name' => $this->detail->name];
             }),
-            'groups' => GroupResource::collection($this->whenLoaded('group'))
+            'groups' => GroupResource::collection($this->whenLoaded('group')),
+            'groups_member' => GroupResource::collection($groupMembers)
         ];
     }
 }

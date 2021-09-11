@@ -40,6 +40,7 @@ $router->group(['prefix' => 'group', 'middleware' => ['auth', 'role:users']], fu
         $router->put('{id:[0-9]+}', 'GroupController@restoreTrashed');
     });
     $router->group(['prefix' => 'owner/{id:[0-9]+}', 'middleware' => 'owner_group'], function () use ($router) {
+        $router->get('', ['as' => 'show_member', 'uses' => 'GroupMemberController@showMember']);
         $router->post('add_member', 'GroupMemberController@addMember');
         $router->delete('remove_member/{id_mem:[0-9]+}', 'GroupMemberController@removeMember');
     });
