@@ -17,32 +17,33 @@ class GroupMemberController extends Controller
      */
     private $duplicate = false;
     private $no_item = false;
-    private function checkValueJSON($json, $item): bool
+    private function checkValueJSON($data, $item): bool
     {
-        return array_search($item, $json) != false;
+        return in_array($item, $data);
     }
     private function addIntoJSON($s, $item)
     {
-        $json = json_decode($s);
-        if ($json) {
-            if ($this->checkValueJSON($json, $item)) {
-                $json[] = $item;
-                return $json;
+        $data = json_decode($s);
+        // dd(is_countable($data));
+        if ($data) {
+            if (!$this->checkValueJSON($data, $item)) {
+                $data[] = $item;
+                return $data;
             }
             $this->duplicate = true;
         }
-        $json = [$item];
-        return $json;
+        $data = [$item];
+        return $data;
     }
     private function removeValueJSON($s, $item)
     {
-        $json = json_decode($s);
-        if ($this->checkValueJSON($json, $item)) {
-            $new = array_diff($json, [$item]);
+        $data = json_decode($s);
+        if ($this->checkValueJSON($data, $item)) {
+            $new = array_diff($data, [$item]);
             return $new;
         }
         $this->no_item = true;
-        return $json;
+        return $data;
     }
     public function showMember($id)
     {
@@ -78,14 +79,32 @@ class GroupMemberController extends Controller
     public function removeMember($id, $id_mem)
     {
         $group = Group::findOrFail($id);
+        if ($group->user_id == $id_mem) {
+            return $this->sendResponse("Error, Group owner cannot be added", null, 400);
+        }
         if (is_null($group->members)) {
             return $this->sendResponse("Error, Group doesnt have Members", null, 400);
         }
+
         $user = User::findOrFail($id_mem);
         $group_members = $this->removeValueJSON($group->members, $id_mem);
         $user_members = $this->removeValueJSON($user->groups_member, $id);
-        if ($this->duplicate) {
+        if ($this->no_item) {
             return $this->sendResponse("Error, Member not found", null, 400);
+        }
+        DB::beginTransaction();
+        try {
+            $group->update([
+                'members' => json_encode($group_members)
+            ]);
+            $user->update([
+                'groups_member' => json_encode($user_members)
+            ]);
+            DB::commit();
+            return $this->sendResponse("Success remove $user->username from $group->name", null, 200);
+        } catch (InvalidOrderException $th) {
+            DB::rollback();
+            return $this->sendResponse("Error", $th, 400);
         }
     }
 }
